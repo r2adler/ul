@@ -28,25 +28,25 @@ interface TextProps {
 }
 
 export const Text = memo((props: TextProps) => {
-    const {
-        className,
-        text,
-        title,
-        theme = TextTheme.PRIMARY,
-        align = TextAlign.LEFT,
-        size = TextSize.M,
-    } = props;
+  const {
+    className,
+    text,
+    title,
+    theme = TextTheme.PRIMARY,
+    align = TextAlign.LEFT,
+    size = TextSize.M,
+  } = props;
 
-    const mods: Mods = {
-        [cls[theme]]: true,
-        [cls[align]]: true,
-        [cls[size]]: true,
-    };
+  const mods: Mods = {
+    [cls[theme]]: true,
+    [cls[align]]: true,
+    [cls[size]]: true,
+  };
 
-    return (
-        <div className={classNames(cls.Text, mods, [className])}>
-            {title && <p className={cls.title}>{title}</p>}
-            {text && <p className={cls.text}>{text}</p>}
-        </div>
-    );
+  return (
+    <div className={classNames(cls.Text, mods, [className])}>
+      {title && <p className={cls.title}>{title}</p>}
+      {text && <p className={cls.text}>{text}</p>}
+    </div>
+  );
 });
