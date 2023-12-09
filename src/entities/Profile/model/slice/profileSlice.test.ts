@@ -70,16 +70,14 @@ describe('profileSlice.test', () => {
       isLoading: true,
     };
 
-    expect(profileReducer(
-            state as ProfileSchema,
-            updateProfileData.fulfilled(data, ''),
-    )).toEqual({
-      isLoading: false,
-      validateErrors: undefined,
-      readonly: true,
-      validateError: undefined,
-      form: data,
-      data,
-    });
+    expect(profileReducer(state as ProfileSchema, updateProfileData.fulfilled(data, '')))
+      .toEqual({
+        isLoading: false,
+        validateErrors: undefined,
+        readonly: true,
+        validateError: undefined,
+        form: data,
+        data,
+      });
   });
 });
