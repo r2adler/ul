@@ -12,8 +12,8 @@ interface SkeletonProps {
 export const Skeleton = memo((props: SkeletonProps) => {
   const {
     className,
-    height,
-    width,
+    height = 100,
+    width = 100,
     border,
   } = props;
 
