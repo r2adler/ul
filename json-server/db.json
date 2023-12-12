@@ -102,6 +102,24 @@
       "text": "some comment 3",
       "articleId": "1",
       "userId": "1"
+    },
+    {
+      "articleId": "1",
+      "userId": "1",
+      "text": "ssssss",
+      "id": "8oi13Yx"
+    },
+    {
+      "articleId": "1",
+      "userId": "2",
+      "text": "users comment",
+      "id": "3dF81M6"
+    },
+    {
+      "articleId": "1",
+      "userId": "2",
+      "text": "eeee",
+      "id": "GHPd7Qw"
     }
   ],
   "users": [
@@ -120,14 +138,28 @@
       "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo9T04s3QrTh72FRwcYsgVcwyYYmXOmLm_c0uHA6kUXo_tyEyibI6iRw5u8g&s"
     }
   ],
-  "profile": {
-    "first": "jgh",
-    "lastname": "asf",
-    "age": 465,
-    "currency": "RUB",
-    "country": "Belarus",
-    "city": "Moscow",
-    "username": "admin213",
-    "avatar": "https://yt3.ggpht.com/ytc/AAUvwngFzM_Rf6MNwOnFcuphoj93k7VFjlIrj-kSMxbh=s900-c-k-c0x00ffffff-no-rj"
-  }
+  "profile": [
+    {
+      "id": "1",
+      "first": "Art",
+      "lastname": "asf",
+      "age": 465,
+      "currency": "RUB",
+      "country": "Belarus",
+      "city": "Moscow",
+      "username": "admin213",
+      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf4Xooun07Y_9ZmosWyTw78x6QFBHrFBd9_-QO4q7Ozc_Ce6ah7yQCzOH5cVUBcqjYUs4&usqp=CAU"
+    },
+    {
+      "id": "2",
+      "first": "Nast",
+      "lastname": "asf",
+      "age": 4,
+      "currency": "RUB",
+      "country": "Belarus",
+      "city": "Moscow",
+      "username": "admin213",
+      "avatar": "https://animalreader.ru/wp-content/uploads/2014/09/3933.jpg"
+    }
+  ]
 }
