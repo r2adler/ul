@@ -1,0 +1,54 @@
+.small {
+  width: 230px;
+
+  .card {
+    padding: 15px;
+    border-radius: 12px;
+    background-color: var(--card-bg);
+  }
+
+  .imageWrapper {
+    width: 200px;
+    height: 200px;
+    position: relative;
+  }
+
+  .img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .createdAt {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .infoWrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .types p {
+    width: 115px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .views {
+    margin-left: auto;
+    margin-right: 8px;
+  }
+
+  .title p {
+    margin-top: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 200px;
+    text-overflow: ellipsis;
+  }
+}
+
+
