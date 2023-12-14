@@ -2,11 +2,13 @@ import { classNames } from 'shared/lib/classNames/classNames';
 import { useTranslation } from 'react-i18next';
 import { memo } from 'react';
 import { Article, ArticleList } from 'entities/Article';
+import { ArticleView } from 'entities/Article/model/types/article';
 import cls from './ArticlesPage.module.scss';
 
 interface ArticlesPageProps {
-    className?: string;
+  className?: string;
 }
+
 const article = {
   id: '1',
   title: 'Javascript news, TS news, REACT news',
@@ -14,6 +16,11 @@ const article = {
   img: 'https://teknotower.com/wp-content/uploads/2020/11/js.png',
   views: 1022,
   createdAt: '26.02.2022',
+  user: {
+    id: '1',
+    username: 'Art',
+    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDU4m4olWV2BljjlOhZLYCLVcy4V3f1viRZw&usqp=CAU',
+  },
   type: [
     'IT', 'ECONOMICS', 'SCIENCE',
   ],
@@ -51,7 +58,7 @@ const article = {
     {
       id: '3',
       type: 'CODE',
-      code: "const path = require('path');\n\nconst server = jsonServer.create();\n\nconst router = jsonServer.router(path.resolve(__dirname, 'db.json'));\n\nserver.use(jsonServer.defaults({}));\nserver.use(jsonServer.bodyParser);",
+      code: 'const path = require(\'path\');\n\nconst server = jsonServer.create();\n\nconst router = jsonServer.router(path.resolve(__dirname, \'db.json\'));\n\nserver.use(jsonServer.defaults({}));\nserver.use(jsonServer.bodyParser);',
     },
     {
       id: '7',
@@ -85,7 +92,15 @@ const ArticlesPage = (props: ArticlesPageProps) => {
 
   return (
     <div className={classNames(cls.ArticlesPage, {}, [className])}>
-      <ArticleList articles={[article]} />
+      <ArticleList
+        isLoading
+        view={ArticleView.BIG}
+        articles={
+          new Array(16).fill(0).map((_, i) => ({
+            ...article, id: String(i),
+          }))
+        }
+      />
     </div>
   );
 };

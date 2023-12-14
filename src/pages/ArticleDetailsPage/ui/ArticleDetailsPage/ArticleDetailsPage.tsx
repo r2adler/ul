@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { memo, useCallback } from 'react';
 import { ArticleDetails } from 'entities/Article';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CommentList } from 'entities/Comment';
 import { Text } from 'shared/ui/Text/Text';
 import clsx from 'clsx';
@@ -10,9 +10,9 @@ import { useSelector } from 'react-redux';
 import { useInitialEffect } from 'shared/lib/hooks/useInitialEffect/useInitialEffect';
 import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch';
 import AddCommentForm from 'features/addCommentForm/ui/AddCommentForm/AddCommentForm';
-import {
-  fetchCommentsByArticleId,
-} from '../../model/services/fetchCommentByArticleId/fetchCommentsByArticleId';
+import { Button, ButtonTheme } from 'shared/ui/Button/Button';
+import { RoutePath } from 'shared/config/routeConfig/routeConfig';
+import { fetchCommentsByArticleId } from '../../model/services/fetchCommentByArticleId/fetchCommentsByArticleId';
 import { addCommentForArticle } from '../../model/services/addCommentForArticle/addCommentForArticle';
 import { getArticleCommentsIsLoading } from '../../selectors/comments';
 import { articleDetailsCommentsReducer, getArticleComments } from '../../model/slices/articleDetailsCommentsSlice';
@@ -30,6 +30,7 @@ const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
 
   const { t } = useTranslation('article-details')
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const { id } = useParams<{ id: string }>()
   const comments = useSelector(getArticleComments.selectAll)
@@ -38,6 +39,10 @@ const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
   const onSendComment = useCallback((text: string) => {
     dispatch(addCommentForArticle(text))
   }, [dispatch])
+
+  const onBackToList = useCallback(() => {
+    navigate(RoutePath.articles)
+  }, [navigate])
 
   useInitialEffect(() => {
     dispatch(fetchCommentsByArticleId(id))
@@ -53,6 +58,9 @@ const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
 
   return (
     <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
+      <Button theme={ButtonTheme.OUTLINE} onClick={onBackToList}>
+        {t('Назад к списку')}
+      </Button>
       <div className={clsx(cls.ArticleDetailsPage, className)}>
         <ArticleDetails id={id} />
         <Text title={t('Комментарии')} />
@@ -60,7 +68,6 @@ const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
         <CommentList isLoading={isLoading} comments={comments} />
       </div>
     </DynamicModuleLoader>
-
   )
 }
 
