@@ -12,6 +12,7 @@ import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch';
 import AddCommentForm from 'features/addCommentForm/ui/AddCommentForm/AddCommentForm';
 import { Button, ButtonTheme } from 'shared/ui/Button/Button';
 import { RoutePath } from 'shared/config/routeConfig/routeConfig';
+import { Page } from 'shared/ui/Page/Page';
 import { fetchCommentsByArticleId } from '../../model/services/fetchCommentByArticleId/fetchCommentsByArticleId';
 import { addCommentForArticle } from '../../model/services/addCommentForArticle/addCommentForArticle';
 import { getArticleCommentsIsLoading } from '../../selectors/comments';
@@ -50,23 +51,25 @@ const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
 
   if (!id) {
     return (
-      <div className={className}>
+      <Page className={className}>
         {t('Статья не найдена')}
-      </div>
+      </Page>
     )
   }
 
   return (
     <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
-      <Button theme={ButtonTheme.OUTLINE} onClick={onBackToList}>
-        {t('Назад к списку')}
-      </Button>
-      <div className={clsx(cls.ArticleDetailsPage, className)}>
-        <ArticleDetails id={id} />
-        <Text title={t('Комментарии')} />
-        <AddCommentForm onSendComment={onSendComment} />
-        <CommentList isLoading={isLoading} comments={comments} />
-      </div>
+      <Page>
+        <Button theme={ButtonTheme.OUTLINE} onClick={onBackToList}>
+          {t('Назад к списку')}
+        </Button>
+        <div className={clsx(cls.ArticleDetailsPage, className)}>
+          <ArticleDetails id={id} />
+          <Text title={t('Комментарии')} />
+          <AddCommentForm onSendComment={onSendComment} />
+          <CommentList isLoading={isLoading} comments={comments} />
+        </div>
+      </Page>
     </DynamicModuleLoader>
   )
 }

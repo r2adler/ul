@@ -26,16 +26,6 @@ export const ArticleList = (props: ArticleListProps) => {
       key={article.id}
     />
   )
-  if (isLoading) {
-    return (
-      <div className={clsx(cls.ArticleList, className)}>
-        {
-          new Array(view === ArticleView.SMALL ? 9 : 3).fill(0)
-            .map((_, i) => <ArticleListItemSkeleton view={view} key={i} />)
-        }
-      </div>
-    )
-  }
 
   return (
     <div className={clsx(cls.ArticleList, className)}>
@@ -44,6 +34,9 @@ export const ArticleList = (props: ArticleListProps) => {
           ? articles.map(renderArticle)
           : null
       }
+      {isLoading
+        && new Array(view === ArticleView.SMALL ? 9 : 3).fill(0)
+          .map((_, i) => <ArticleListItemSkeleton view={view} key={i} />)}
     </div>
   )
 }
