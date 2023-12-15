@@ -10,6 +10,9 @@ type ArticleListProps = {
   isLoading?: boolean
   view?: ArticleView
 }
+const getSkeletons = (view: ArticleView) => new Array(view === ArticleView.SMALL ? 9 : 3).fill(0)
+  .map((_, i) => <ArticleListItemSkeleton view={view} key={i} />)
+
 export const ArticleList = (props: ArticleListProps) => {
   const {
     className,
@@ -34,9 +37,7 @@ export const ArticleList = (props: ArticleListProps) => {
           ? articles.map(renderArticle)
           : null
       }
-      {isLoading
-        && new Array(view === ArticleView.SMALL ? 9 : 3).fill(0)
-          .map((_, i) => <ArticleListItemSkeleton view={view} key={i} />)}
+      {isLoading && getSkeletons(view)}
     </div>
   )
 }

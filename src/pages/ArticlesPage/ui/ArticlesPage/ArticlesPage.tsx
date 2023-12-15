@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { memo, useCallback } from 'react';
 import { ArticleList } from 'entities/Article';
 import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader';
@@ -9,10 +8,10 @@ import { ArticleViewSelector } from 'features/ArticleViewSelector/ArticleViewSel
 import { ArticleView } from 'entities/Article/model/types/article';
 import { Page } from 'shared/ui/Page/Page';
 import clsx from 'clsx';
+import { initArticlesPage } from '../../model/services/initArticlesPage/initArticlesPage';
 import { getArticlesPageIsLoading, getArticlesPageView } from '../../model/selectors/articlesPageSelectors';
 import cls from './ArticlesPage.module.scss';
 import { articlesPageActions, articlesPageReducer, getArticles } from '../../model/slice/articlesPageSlice';
-import { fetchArticlesList } from '../../model/services/fetchArticlesList/fetchArticlesList';
 import { fetchNextArticlesPage } from '../../model/services/fetchNextArticlesPage/fetchNextArticlesPage';
 
 interface ArticlesPageProps {
@@ -25,7 +24,6 @@ const reducers: ReducersList = {
 
 const ArticlesPage = (props: ArticlesPageProps) => {
   const { className } = props;
-  const { t } = useTranslation();
   const dispatch = useAppDispatch()
   const articles = useSelector(getArticles.selectAll)
   const isLoading = useSelector(getArticlesPageIsLoading)
@@ -40,14 +38,11 @@ const ArticlesPage = (props: ArticlesPageProps) => {
   }, [dispatch])
 
   useInitialEffect(() => {
-    dispatch(articlesPageActions.initState())
-    dispatch(fetchArticlesList({
-      page: 1,
-    }))
+    dispatch(initArticlesPage())
   })
 
   return (
-    <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
       <Page onScrollEnd={onLoadNextPart} className={clsx(cls.ArticlesPage, className)}>
         <ArticleViewSelector view={view} onViewClick={onChangeView} />
         <ArticleList isLoading={isLoading} view={view} articles={articles} />

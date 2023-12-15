@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next';
 import { Text } from 'shared/ui/Text/Text';
-import { Skeleton } from 'shared/ui/Skeleton/Skeleton';
 import { CommentCard } from '../CommentCard/CommentCard';
 import cls from './CommentList.module.scss'
 import { Comment } from '../../model/types/comment'
@@ -27,7 +26,7 @@ export const CommentList = ({ className, comments, isLoading }: CommentListProps
   return (
     <div className={clsx(cls.CommentList, className)}>
       {comments?.length
-        ? comments.map((comment) => <CommentCard comment={comment} isLoading={isLoading} />)
+        ? comments.map((comment) => <CommentCard key={comment.id} comment={comment} isLoading={isLoading} />)
         : <Text text={t('Комментарии отсутствуют')} />}
     </div>
   )
