@@ -1,9 +1,21 @@
 import { classNames } from 'shared/lib/classNames/classNames';
 import { useTranslation } from 'react-i18next';
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Article, ArticleList } from 'entities/Article';
+import { DynamicModuleLoader, ReducersList } from 'shared/lib/components/DynamicModuleLoader/DynamicModuleLoader';
+import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useInitialEffect } from 'shared/lib/hooks/useInitialEffect/useInitialEffect';
+import { useSelector } from 'react-redux';
+import { ArticleViewSelector } from 'features/ArticleViewSelector/ArticleViewSelector';
 import { ArticleView } from 'entities/Article/model/types/article';
+import { fetchArticlesList } from '../../model/services/fetchArticlesList';
+import {
+  getArticlesPageError,
+  getArticlesPageIsLoading,
+  getArticlesPageView,
+} from '../../model/selectors/articlesPageSelectors';
 import cls from './ArticlesPage.module.scss';
+import { articlesPageActions, articlesPageReducer, getArticles } from '../../model/slice/articlesPageSlice';
 
 interface ArticlesPageProps {
   className?: string;
@@ -30,9 +42,18 @@ const article = {
       type: 'TEXT',
       title: 'Заголовок этого блока',
       paragraphs: [
-        'Программа, которую по традиции называют «Hello, world!», очень проста. Она выводит куда-либо фразу «Hello, world!», или другую подобную, средствами некоего языка.',
-        'JavaScript — это язык, программы на котором можно выполнять в разных средах. В нашем случае речь идёт о браузерах и о серверной платформе Node.js. Если до сих пор вы не написали ни строчки кода на JS и читаете этот текст в браузере, на настольном компьютере, это значит, что вы буквально в считанных секундах от своей первой JavaScript-программы.',
-        'Существуют и другие способы запуска JS-кода в браузере. Так, если говорить об обычном использовании программ на JavaScript, они загружаются в браузер для обеспечения работы веб-страниц. Как правило, код оформляют в виде отдельных файлов с расширением .js, которые подключают к веб-страницам, но программный код можно включать и непосредственно в код страницы. Всё это делается с помощью тега <script>. Когда браузер обнаруживает такой код, он выполняет его. Подробности о теге script можно посмотреть на сайте w3school.com. В частности, рассмотрим пример, демонстрирующий работу с веб-страницей средствами JavaScript, приведённый на этом ресурсе. Этот пример можно запустить и средствами данного ресурса (ищите кнопку Try it Yourself), но мы поступим немного иначе. А именно, создадим в каком-нибудь текстовом редакторе (например — в VS Code или в Notepad++) новый файл, который назовём hello.html, и добавим в него следующий код:',
+        'Программа, которую по традиции называют «Hello, world!», очень проста. Она выводит куда-либо '
+        + 'фразу'
+        + ' «Hello, world!», или другую подобную, средствами некоего языка.',
+        'JavaScript — это язык, программы на котором можно выполнять в разных средах. '
+        + 'В нашем случае речь идёт о браузерах и о серверной платформе Node.js. Если до сих пор '
+        + 'вы не написали ни строчки кода на JS и читаете этот текст в браузере, на настольном компьютере, '
+        + 'это значит, что вы буквально в считанных секундах от своей первой JavaScript-программы.',
+        'Существуют и другие способы запуска JS-кода в браузере. Так, если говорить об обычном '
+        + 'использовании программ на JavaScript, они загружаются в браузер для обеспечения работы'
+        + ' веб-страниц. Как правило, код оформляют в виде отдельных файлов с расширением .js, которые'
+        + ' подключают к веб-страницам, но программный код можно включать и непосредственно в код'
+        + ' страницы. Всё это делается с помощью тега <script>. Когда браузер обнаруживает такой код, он выполняет его. Подробности о теге script можно посмотреть на сайте w3school.com. В частности, рассмотрим пример, демонстрирующий работу с веб-страницей средствами JavaScript, приведённый на этом ресурсе. Этот пример можно запустить и средствами данного ресурса (ищите кнопку Try it Yourself), но мы поступим немного иначе. А именно, создадим в каком-нибудь текстовом редакторе (например — в VS Code или в Notepad++) новый файл, который назовём hello.html, и добавим в него следующий код:',
       ],
     },
     {
@@ -86,22 +107,35 @@ const article = {
   ],
 } as Article
 
+const reducers: ReducersList = {
+  articlesPage: articlesPageReducer,
+}
+
 const ArticlesPage = (props: ArticlesPageProps) => {
   const { className } = props;
   const { t } = useTranslation();
+  const dispatch = useAppDispatch()
+  const articles = useSelector(getArticles.selectAll)
+  const isLoading = useSelector(getArticlesPageIsLoading)
+  const view = useSelector(getArticlesPageView)
+  const error = useSelector(getArticlesPageError)
+
+  const onChangeView = useCallback((newView: ArticleView) => {
+    dispatch(articlesPageActions.setView(newView))
+  }, [dispatch])
+
+  useInitialEffect(() => {
+    dispatch(fetchArticlesList())
+    dispatch(articlesPageActions.initState())
+  })
 
   return (
-    <div className={classNames(cls.ArticlesPage, {}, [className])}>
-      <ArticleList
-        isLoading
-        view={ArticleView.BIG}
-        articles={
-          new Array(16).fill(0).map((_, i) => ({
-            ...article, id: String(i),
-          }))
-        }
-      />
-    </div>
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
+      <div className={classNames(cls.ArticlesPage, {}, [className])}>
+        <ArticleViewSelector view={view} onViewClick={onChangeView} />
+        <ArticleList isLoading={isLoading} view={view} articles={articles} />
+      </div>
+    </DynamicModuleLoader>
   );
 };
 

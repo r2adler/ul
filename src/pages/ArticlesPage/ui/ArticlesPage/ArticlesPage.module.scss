@@ -1,3 +1,15 @@
 .ArticlesPage {
   min-height: 100%;
 }
+
+.editView {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 10px;
+}
+
+.editButtons {
+  cursor: pointer;
+
+}
