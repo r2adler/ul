@@ -37,7 +37,7 @@ export const ArticleSortSelector = (props: ArticleSortSelectorProps) => {
   return (
     <div className={clsx(cls.ArticleSortSelector, className)}>
       <Select label={t('сортировать по')} options={sortFieldOptions} onChange={onChangeSort} />
-      <Select label={t('по')} options={orderOptions} onChange={onChangeOrder} />
+      <Select label={t('по')} options={orderOptions} onChange={onChangeOrder} className={cls.order} />
     </div>
   )
 }
