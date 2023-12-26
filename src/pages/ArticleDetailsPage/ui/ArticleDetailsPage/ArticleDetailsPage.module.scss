@@ -3,3 +3,14 @@
   flex-direction: column;
   gap: 23px;
 }
+
+.recommendations {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.commentTitle {
+  margin-top: 20px;
+}

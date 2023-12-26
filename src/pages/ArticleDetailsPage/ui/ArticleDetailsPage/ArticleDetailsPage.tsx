@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { memo, useCallback } from 'react';
-import { ArticleDetails } from 'entities/Article';
+import { ArticleDetails, ArticleList } from 'entities/Article';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CommentList } from 'entities/Comment';
 import { Text } from 'shared/ui/Text/Text';
@@ -13,10 +13,16 @@ import AddCommentForm from 'features/addCommentForm/ui/AddCommentForm/AddComment
 import { Button, ButtonTheme } from 'shared/ui/Button/Button';
 import { RoutePath } from 'shared/config/routeConfig/routeConfig';
 import { Page } from 'widgets/Page/Page';
+import { getArticleCommentsIsLoading } from 'pages/ArticleDetailsPage/model/selectors/comments';
+import { getArticleRecommendationsIsLoading } from 'pages/ArticleDetailsPage/model/selectors/recommendations';
+import { articleDetailsPageReducer } from 'pages/ArticleDetailsPage/model/slices';
+import { getArticleRecommendations } from '../../model/slices/articleDetailsPageRecommendationsSlice';
+import {
+  fetchArticleRecommendations,
+} from '../../model/services/fetchArticleRecommendations/fetchArticleRecommendations';
 import { fetchCommentsByArticleId } from '../../model/services/fetchCommentByArticleId/fetchCommentsByArticleId';
 import { addCommentForArticle } from '../../model/services/addCommentForArticle/addCommentForArticle';
-import { getArticleCommentsIsLoading } from '../../selectors/comments';
-import { articleDetailsCommentsReducer, getArticleComments } from '../../model/slices/articleDetailsCommentsSlice';
+import { getArticleComments } from '../../model/slices/articleDetailsCommentsSlice';
 import cls from './ArticleDetailsPage.module.scss'
 
 interface ArticleDetailsPageProps {
@@ -24,7 +30,7 @@ interface ArticleDetailsPageProps {
 }
 
 const reducers: ReducersList = {
-  articleDetailsComments: articleDetailsCommentsReducer,
+  articleDetailsPage: articleDetailsPageReducer,
 }
 const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
   const { className } = props
@@ -36,6 +42,8 @@ const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
   const { id } = useParams<{ id: string }>()
   const comments = useSelector(getArticleComments.selectAll)
   const isLoading = useSelector(getArticleCommentsIsLoading)
+  const recommendationsIsLoading = useSelector(getArticleRecommendationsIsLoading)
+  const recommendations = useSelector(getArticleRecommendations.selectAll)
 
   const onSendComment = useCallback((text: string) => {
     dispatch(addCommentForArticle(text))
@@ -47,6 +55,7 @@ const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
 
   useInitialEffect(() => {
     dispatch(fetchCommentsByArticleId(id))
+    dispatch(fetchArticleRecommendations())
   })
 
   if (!id) {
@@ -65,7 +74,14 @@ const ArticleDetailsPage = (props: ArticleDetailsPageProps) => {
         </Button>
         <div className={clsx(cls.ArticleDetailsPage, className)}>
           <ArticleDetails id={id} />
-          <Text title={t('Комментарии')} />
+          <Text title={t('Рекомендуем')} />
+          <ArticleList
+            target="_blank"
+            articles={recommendations}
+            isLoading={recommendationsIsLoading}
+            className={cls.recommendations}
+          />
+          <Text title={t('Комментарии')} className={cls.commentTitle} />
           <AddCommentForm onSendComment={onSendComment} />
           <CommentList isLoading={isLoading} comments={comments} />
         </div>
